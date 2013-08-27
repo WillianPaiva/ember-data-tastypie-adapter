@@ -167,20 +167,32 @@ DS.DjangoTastypieAdapter = DS.RESTAdapter.extend({
      from which the offset will be extrated for the next request
   */
   sinceQuery: function(since) {
+
+
     var offsetParam,
         query;
 
     query = {};
 
     if (!!since) {
-      offsetParam = since.match(/offset=(\d+)/);
-      offsetParam = (!!offsetParam && !!offsetParam[1]) ? offsetParam[1] : null;
-      query.offset = offsetParam;
+      var querybuild = {};
+
+      var test = since.split("/?");
+      var parans = test[1].split("&");
+
+      for(x = 0; x<parans.length;x++){
+        var test2  = parans[x].split("=");
+        querybuild[test2[0]]=test2[1];
+
+
+      }
+      //offsetParam = since.match(/offset=(\d+)/);
+      //offsetParam = (!!offsetParam && !!offsetParam[1]) ? offsetParam[1] : null;
+      query = querybuild;
     }
 
     return offsetParam ? query : null;
   },
-
   removeTrailingSlash: function(url) {
     if (url.charAt(url.length -1) === '/') {
       return url.slice(0, -1);
